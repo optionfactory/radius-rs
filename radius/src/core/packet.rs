@@ -79,10 +79,7 @@ impl Packet {
         let authenticator = (0..16).map(|_| rng.gen()).collect::<Vec<u8>>();
         Packet {
             code: code.to_owned(),
-            identifier: match maybe_identifier {
-                Some(ident) => ident,
-                None => rng.gen(),
-            },
+            identifier: maybe_identifier.unwrap_or_else(|| rng.gen()),
             authenticator,
             secret: secret.to_owned(),
             attributes: Attributes(vec![]),
@@ -433,9 +430,16 @@ impl Packet {
         self.attributes.lookup(typ)
     }
 
+    pub fn lookup_mut(&mut self, typ: AVPType) -> Option<&mut AVP> {
+        self.attributes.lookup_mut(typ)
+    }
     /// Returns AVPs that match with the given AVP type.
     pub fn lookup_all(&self, typ: AVPType) -> Vec<&AVP> {
         self.attributes.lookup_all(typ)
+    }
+
+    pub fn iter_attributes(&self) -> impl Iterator<Item = &AVP> {
+        self.attributes.0.iter()
     }
 }
 

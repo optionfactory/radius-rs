@@ -63,7 +63,7 @@ pub const TYPE_INVALID: AVPType = 255;
 /// This struct represents a attribute-value pair.
 #[derive(Debug, Clone, PartialEq)]
 pub struct AVP {
-    pub(crate) typ: AVPType,
+    pub typ: AVPType,
     pub(crate) value: Vec<u8>,
 }
 

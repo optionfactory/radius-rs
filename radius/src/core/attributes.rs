@@ -49,6 +49,10 @@ impl Attributes {
         self.0.iter().find(|avp| avp.typ == typ)
     }
 
+    pub(crate) fn lookup_mut(&mut self, typ: AVPType) -> Option<&mut AVP> {
+        self.0.iter_mut().find(|avp| avp.typ == typ)
+    }
+
     pub(crate) fn lookup_all(&self, typ: AVPType) -> Vec<&AVP> {
         self.0.iter().filter(|&avp| avp.typ == typ).collect()
     }
