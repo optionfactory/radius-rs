@@ -70,13 +70,18 @@ impl Packet {
     /// Constructor for a Packet with arbitrary identifier value.
     ///
     /// If you want to make an instance with a random identifier value, please consider using `new()`.
-    pub fn new_with_identifier(code: Code, secret: &[u8], identifier: u8) -> Self {
+    fn new_with_identifier(code: Code, secret: &[u8], identifier: u8) -> Self {
         Self::_new(code, secret, Some(identifier))
     }
 
-    fn _new(code: Code, secret: &[u8], maybe_identifier: Option<u8>) -> Self {
+    pub fn _new(code: Code, secret: &[u8], maybe_identifier: Option<u8>) -> Self {
         let mut rng = rand::thread_rng();
         let authenticator = (0..16).map(|_| rng.gen()).collect::<Vec<u8>>();
+        Self::new_with_authenticator(code, secret, maybe_identifier, authenticator)
+    }
+
+    pub fn new_with_authenticator(code: Code, secret: &[u8], maybe_identifier: Option<u8>, authenticator: Vec<u8>) -> Self {
+        let mut rng = rand::thread_rng();
         Packet {
             code: code.to_owned(),
             identifier: maybe_identifier.unwrap_or_else(|| rng.gen()),
